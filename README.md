@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # AR Indoor Navigation with three.js
 
 This is the corresponding github repository for the short tutorial series about "How to create an indoor navigation app with ARFoundation WITHOUT the usage of Cloud Anchors or using ARPointCloud Data.". Make sure to have the marker images available to test the tracking. The links for the used images can be found in the index.html. To test with the example from the videos, you can visit https://firedragongamestudio.github.io/ARIndoorNavigation-Threejs
@@ -27,3 +28,6 @@ After creating a simple plane mesh in Blender, the NavMesh was generated and dow
 ## How to install?
 
 After cloning or either downloading this repo, open the parent folder in Visual Studio Code. Open a Terminal console and execute `npm install` to install dev + regular dependencies. Note that this can take some time, so don't be impatient. After the install is complete launch the local webserver with `npx vite`. Vite is configured to spin up a local https webserver AND supports hotswapping, so your changes will be reflected in realtime, without having to stop the running server. This will be very convenient for testing, as this server is reachable from within your local netweork too, so when testing on a mobile device, there is NO NEED TO DEPLOY/RELAUNCH every time.
+=======
+# tesisWebXR
+>>>>>>> 79be2fb6104249ee79384472ebd9f73a8b0962f5
