@@ -56,11 +56,13 @@ class ImageTrackingWebXR {
             trackedImages: [
                 {
                     image: imgMarkerHiroBitmap, // tell webxr this is the image target we want to track
-                    widthInMeters: 0.13, // in meters what the size of the PRINTED image in the real world
+                    // widthInMeters: 0.13, // in meters what the size of the PRINTED image in the real world
+                    widthInMeters: 0.2, // in meters what the size of the PRINTED image in the real world
                 },
                 {
                     image: imgNFTEarthBitmap, // tell webxr this is the image target we want to track
-                    widthInMeters: 0.13, // in meters what the size of the PRINTED image in the real world
+                    // widthInMeters: 0.13, // in meters what the size of the PRINTED image in the real world
+                    widthInMeters: 0.2, // in meters what the size of the PRINTED image in the real world
                 },
             ],
             //this is for the mobile debug
@@ -105,7 +107,7 @@ class ImageTrackingWebXR {
                         markerWorldRotation.setFromQuaternion(markerWorldQuaternion);
 
                         // offset to start in the middle of the living room
-                        navigationArea.position.set(-2.8, 0, 2);
+                        navigationArea.position.set(-9.5, 0.5, -0.9);
                     }
                     if (imageIndex == 1) {
                         earthNFTMesh.visible = true;
@@ -119,7 +121,7 @@ class ImageTrackingWebXR {
 
                         // setting the offset for the specific marker
                         // navigationArea.position.set(0.7, 0, 2.5);
-                        navigationArea.position.set(-11.5, 0, 1);
+                        navigationArea.position.set(-12, 0.5, -0.9);
                     }
                     console.log("Image target world position", imageIndex, markerWorldPosition);
                     console.log("Image target world rotation", imageIndex, markerWorldRotation);

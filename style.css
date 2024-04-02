@@ -23,8 +23,8 @@ body {
 #kitchenTarget,
 #livingRoomTarget,
 #hcmTarget,
-#mmbTarget,
-#dosenTarget,
+/* #mmbTarget, */
+/* #dosenTarget, */
 #kelasTarget {
     padding: 12px 6px;
     border: 1px solid rgb(255, 255, 255);

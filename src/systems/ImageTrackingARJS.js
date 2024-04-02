@@ -161,8 +161,8 @@ class ImageTrackingARJS {
             markerWorldRotation.setFromQuaternion(markerWorldQuaternion);
 
             // offset to start in the middle of the kitchen
-            // navigationArea.position.set(0.7, 0, 2.5);
-            navigationArea.position.set(11.5, 0, 1);
+            navigationArea.position.set(0.7, 0, 2.5);
+            // navigationArea.position.set(11.5, 0, 1);
 
             // set starting point to start-room center
             navigationAreaParent.position.copy(markerWorldPosition);

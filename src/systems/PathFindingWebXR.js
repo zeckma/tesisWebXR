@@ -1,9 +1,9 @@
-import { Vector3, MeshBasicMaterial, Mesh, Group, BoxGeometry, BufferGeometry, Line, LineBasicMaterial } from "three";
+import { Vector3, MeshBasicMaterial, Mesh, Group, ArrowHelper, BoxGeometry, BufferGeometry, Line, LineBasicMaterial } from "three";
 
 import { Pathfinding } from "three-pathfinding";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-// import NavMeshUrl from "/navmesh.gltf";
-import NavMeshUrl from "/lt9-navmesh.gltf";
+// import NavMeshUrl from "/lt9-nav2.gltf";
+import NavMeshUrl from "/nav-bis-3.gltf";
 
 const zeroVector = new Vector3(0, 0, 0);
 
@@ -14,7 +14,8 @@ let zoneData;
 let startPosition = new Vector3();
 let targetPosition = new Vector3();
 
-let tempTargetPosition = new Vector3(11, 0.5, 1);
+// posisi end-point ketika aplikasi berjalan
+let tempTargetPosition = new Vector3(9.5, 0.2, 0.9);
 
 let line;
 
@@ -24,7 +25,7 @@ let navigationArea;
 let isStartCubeCreated = false;
 let isEndCubeCreated = false;
 
-const navCubes = [];
+const navArrows = [];
 
 class PathFindingWebXR {
     constructor(cameraParam, navigationAreaParam) {
@@ -41,7 +42,9 @@ class PathFindingWebXR {
 
                 let navMesh = gltf.scene;
                 navigationArea.add(navMesh);
-
+                navMesh.translateX(-29.6); //  translasi pada sumbu x
+                navMesh.translateY(-0.1); // translasi pada sumbu y
+                navMesh.translateZ(9.5); //  translasi pada sumbu z
                 let navMeshGeometry = new BufferGeometry();
                 navMesh.children.forEach((child) => {
                     if (child.type === "Mesh") {
@@ -49,7 +52,14 @@ class PathFindingWebXR {
                         navMeshGeometry = child;
                     }
                 });
-                navMeshGeometry.visible = false;
+
+                // Change color of navmesh
+                var newMaterial = new MeshBasicMaterial({ color: 0xfc0303 });
+                navMesh.traverse((o) => {
+                    if (o.isMesh) o.material = newMaterial;
+                });
+
+                navMeshGeometry.visible = true;
 
                 zoneData = Pathfinding.createZone(navMeshGeometry.geometry);
                 pathfinding.setZoneData(zoneName, zoneData);
@@ -62,52 +72,41 @@ class PathFindingWebXR {
         );
 
         // navigation line
-        const lineGeometry = new BufferGeometry();
-        const lineMaterial = new LineBasicMaterial({ color: 0xff0000, linewidth: 12 });
-        line = new Line(lineGeometry, lineMaterial);
-        line.renderOrder = 3;
-        navigationArea.add(line);
+        // const lineGeometry = new BufferGeometry();
+        // const lineMaterial = new LineBasicMaterial({ color: 0xff0000, linewidth: 12 });
+        // line = new Line(lineGeometry, lineMaterial);
+        // line.renderOrder = 3;
+        // navigationArea.add(line);
+
+        // const lineGeometry = new BufferGeometry();
+        // const lineMaterial = new LineBasicMaterial( { color: 0xff0000 } );
+        // const positions = new Float32Array( 500 * 3 ); // 3 vertices per point
+        // lineGeometry.setAttribute( 'position', new BufferAttribute( positions, 3 ) );
+        // line = new Line( lineGeometry,  lineMaterial );
+        // line.renderOrder = 3;
+        // navigationArea.add(line);
 
         // highlight line vertices with small cubes
-        const geometry = new BoxGeometry(0.1, 0.1, 0.1);
+        const boxGeometry = new BoxGeometry(0.25, 0.25, 0.25);
         const material = new MeshBasicMaterial({ color: 0xff0000 });
         for (let index = 0; index < 20; index++) {
-            const cube = new Mesh(geometry, material);
-            cube.visible = false;
-            cube.renderOrder = 3;
-            navCubes.push(cube);
-            navigationArea.add(cube);
+            const box = new Mesh(boxGeometry, material);
+            box.visible = false;
+            box.renderOrder = 3;
+            navArrows.push(box);
+            navigationArea.add(box);
         }
 
-        // document.getElementById("kitchenTarget").addEventListener("click", () => {
-        //     console.log("kitchen selected");
-        //     // tempTargetPosition.set(0, 0.5, -2);
-        //     tempTargetPosition.set(0, 0.5, 0.3);
-        // });
-        // document.getElementById("livingRoomTarget").addEventListener("click", () => {
-        //     console.log("livingRoom selected");
-        //     tempTargetPosition.set(3, 0.5, -2);
-        // });
 
+        // ketika user menekan tombol, maka value tempTargetPosition berubah dan path planning diarahkan ke sana
         document.getElementById("hcmTarget").addEventListener("click", () => {
-            console.log("HCM selected");
-            // tempTargetPosition.set(0, 0.5, -2);
-            tempTargetPosition.set(11.5, 0.5, 1);
+            console.log("kitchen selected");
+            tempTargetPosition.set(12, 0.2, 0.9);
         });
-        document.getElementById("dosenTarget").addEventListener("click", () => {
-            console.log("Ruang Dosen selected");
-            // tempTargetPosition.set(3, 0.5, -2);
-            tempTargetPosition.set(9.3, 0.5, 1);
+        document.getElementById("kelasTarget").addEventListener("click", () => {
+            console.log("livingRoom selected");
+            tempTargetPosition.set(9.5, 0.2, 0.9);
         });
-        // document.getElementById("kelasTarget").addEventListener("click", () => {
-        //     console.log("Ruang Kelas selected");
-        //     // tempTargetPosition.set(0, 0.5, -2);
-        //     tempTargetPosition.set(-2.5, 0.5, 1);
-        // });
-        // document.getElementById("mmbTarget").addEventListener("click", () => {
-        //     console.log("Ruang MMB selected");
-        //     tempTargetPosition.set(-19, 0.5, 1);
-        // });
     }
 
     setStartPosition(start) {
@@ -121,10 +120,12 @@ class PathFindingWebXR {
         // visual for better debugging
         if (!isStartCubeCreated) {
             const startGeometry = new BoxGeometry(0.2, 0.2, 0.2);
-            const startMaterial = new MeshBasicMaterial({ color: 0x00ffff });
+            // const startMaterial = new MeshBasicMaterial({ color: 0x90c8ff });
+            // KOTAK WARNA HIJAU
+            const startMaterial = new MeshBasicMaterial({ color: 0x90c800 });
             const startCube = new Mesh(startGeometry, startMaterial);
-            startCube.position.set(9.3, 0.5, 1);
-            // startCube.position.set(3, 0.5, -2);
+            startCube.position.set(9.5, 0.2, 0.9);
+
             startCube.renderOrder = 3;
 
             navigationArea.add(startCube);
@@ -142,16 +143,28 @@ class PathFindingWebXR {
         // visual for better debugging
         if (!isEndCubeCreated) {
             const targetGeometry = new BoxGeometry(0.2, 0.2, 0.2);
-            const targetMaterial = new MeshBasicMaterial({ color: 0xff5500 });
+            // KOTAK WARNA BIRU
+            const targetMaterial = new MeshBasicMaterial({ color: 0x90c8ff });
             const targetCube = new Mesh(targetGeometry, targetMaterial);
-            // targetCube.position.set(tempTargetPosition.x, tempTargetPosition.y, tempTargetPosition.z);
-            targetCube.position.set(11.5, 0.5, 1);
-            // targetCube.position.set(0, 0.5, -2);
+            targetCube.position.set(12, 0.2, 0.9);
             targetCube.renderOrder = 3;
 
             navigationArea.add(targetCube);
             isEndCubeCreated = !isEndCubeCreated;
         }
+    }
+
+    updatePositions(points) {
+
+        const positionAttribute = line.geometry.getAttribute('position');
+
+        for (let i = 0, l = points.length; i < l; i++) {
+            positionAttribute.setXYZ(i, points[i].x, points[i].y, points[i].z);
+        }
+        console.log("points", points);
+        console.log("line", line);
+        positionAttribute.needsUpdate = true;
+
     }
 
     calculatePath(timestamp, frame, imageTracking) {
@@ -161,7 +174,7 @@ class PathFindingWebXR {
             if (markerWorldPosition != zeroVector) {
                 // calculate "offseted" positions, as navigation mesh can't be moved/rotated
                 const cameraPosition = navigationArea.worldToLocal(camera.position);
-                const navStart = new Vector3(cameraPosition.x, 0.5, cameraPosition.z);
+                const navStart = new Vector3(cameraPosition.x, cameraPosition.y, cameraPosition.z);
                 // set endposition to current target
                 const navEnd = new Vector3(tempTargetPosition.x, tempTargetPosition.y, tempTargetPosition.z);
 
@@ -173,18 +186,28 @@ class PathFindingWebXR {
                 // console.log("Zone", zoneData);
 
                 if (path != null) {
-                    const points = [navStart];
-                    // points.push(navStart);
+                    const points = [];
+                    points.push(navStart);
                     for (let index = 0; index < path.length; index++) {
                         points.push(path[index]);
-                        navCubes[index].position.set(path[index].x, 0.2, path[index].z);
-                        navCubes[index].visible = true;
+                        navArrows[index].position.set(path[index].x, 0.2, path[index].z);
+                        navArrows[index].visible = true;
                     }
-                    for (let unsetIndex = path.length; unsetIndex < navCubes.length; unsetIndex++) {
-                        // navCubes[unsetIndex].position.set(0, 0, 0);
-                        navCubes[unsetIndex].visible = false;
+                    for (let unsetIndex = path.length; unsetIndex < navArrows.length; unsetIndex++) {
+                        navArrows[unsetIndex].position.set(0, 0, 0);
+                        navArrows[unsetIndex].visible = false;
                     }
+
+                    navigationArea.remove(line);
+                    const lineGeometry = new BufferGeometry();
+                    const lineMaterial = new LineBasicMaterial({ color: 0xff0000, linewidth: 50 });
+                    line = new Line(lineGeometry, lineMaterial);
+                    line.renderOrder = 3;
                     line.geometry.setFromPoints(points);
+                    navigationArea.add(line);
+
+                    // this.updatePositions(points);
+
                 }
             }
         }
