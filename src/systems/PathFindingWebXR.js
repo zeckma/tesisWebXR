@@ -1,9 +1,10 @@
-import { Vector3, MeshBasicMaterial, Mesh, Group, ArrowHelper, BoxGeometry, BufferGeometry, Line, LineBasicMaterial } from "three";
+import { Vector3, MeshBasicMaterial, Mesh, Group, ArrowHelper, BoxGeometry, BufferGeometry, Line, LineBasicMaterial, CapsuleGeometry } from "three";
 
 import { Pathfinding } from "three-pathfinding";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 // import NavMeshUrl from "/lt9-nav2.gltf";
-import NavMeshUrl from "/nav-bis-3.gltf";
+// import NavMeshUrl from "/nav-bis-3.gltf";
+import NavMeshUrl from "/2.gltf";
 
 const zeroVector = new Vector3(0, 0, 0);
 
@@ -15,7 +16,8 @@ let startPosition = new Vector3();
 let targetPosition = new Vector3();
 
 // posisi end-point ketika aplikasi berjalan
-let tempTargetPosition = new Vector3(9.5, 0.2, 0.9);
+// let tempTargetPosition = new Vector3(9.5, 0.2, 0.9);
+let tempTargetPosition = new Vector3(12, 0.2, 0.9);
 
 let line;
 
@@ -42,9 +44,9 @@ class PathFindingWebXR {
 
                 let navMesh = gltf.scene;
                 navigationArea.add(navMesh);
-                navMesh.translateX(-29.6); //  translasi pada sumbu x
-                navMesh.translateY(-0.1); // translasi pada sumbu y
-                navMesh.translateZ(9.5); //  translasi pada sumbu z
+                // navMesh.translateX(-29.6); //  translasi pada sumbu x
+                // navMesh.translateY(-0.1); // translasi pada sumbu y
+                // navMesh.translateZ(9.7); //  translasi pada sumbu z
                 let navMeshGeometry = new BufferGeometry();
                 navMesh.children.forEach((child) => {
                     if (child.type === "Mesh") {
@@ -54,7 +56,7 @@ class PathFindingWebXR {
                 });
 
                 // Change color of navmesh
-                var newMaterial = new MeshBasicMaterial({ color: 0xfc0303 });
+                var newMaterial = new MeshBasicMaterial({ color: 0xfc0303, transparent: true, opacity: 0.5 });
                 navMesh.traverse((o) => {
                     if (o.isMesh) o.material = newMaterial;
                 });
@@ -105,7 +107,12 @@ class PathFindingWebXR {
         });
         document.getElementById("kelasTarget").addEventListener("click", () => {
             console.log("livingRoom selected");
-            tempTargetPosition.set(9.5, 0.2, 0.9);
+            //ruang dosen
+            // tempTargetPosition.set(9.5, 0.2, 0.9);
+            //ruang mahasiswa
+            // tempTargetPosition.set(-1, 0.2, 0.9);
+            //ruang gudang
+            tempTargetPosition.set(22, 0.2, 3.6);
         });
     }
 
@@ -124,7 +131,7 @@ class PathFindingWebXR {
             // KOTAK WARNA HIJAU
             const startMaterial = new MeshBasicMaterial({ color: 0x90c800 });
             const startCube = new Mesh(startGeometry, startMaterial);
-            startCube.position.set(9.5, 0.2, 0.9);
+            startCube.position.set(22, 0.2, 3.6);
 
             startCube.renderOrder = 3;
 
@@ -142,7 +149,8 @@ class PathFindingWebXR {
 
         // visual for better debugging
         if (!isEndCubeCreated) {
-            const targetGeometry = new BoxGeometry(0.2, 0.2, 0.2);
+            // const targetGeometry = new BoxGeometry(0.2, 0.2, 0.2);
+            const targetGeometry = new CapsuleGeometry(0.2, 0.2, 0.2);
             // KOTAK WARNA BIRU
             const targetMaterial = new MeshBasicMaterial({ color: 0x90c8ff });
             const targetCube = new Mesh(targetGeometry, targetMaterial);

@@ -1,4 +1,4 @@
-import { MeshStandardMaterial, Vector3, PlaneGeometry, TextureLoader, MeshBasicMaterial, Mesh, MathUtils, Group, BoxGeometry } from "three";
+import { MeshStandardMaterial, Vector3, PlaneGeometry, TextureLoader, MeshBasicMaterial, Mesh, MathUtils, Group, BoxGeometry, EdgesGeometry, LineSegments, LineBasicMaterial } from "three";
 // import CasualFlapMapImageUrl from "/CasualFlatMap.png";
 import lt9ImageUrl from "/img-lt9.png";
 
@@ -73,13 +73,14 @@ function setupNavigationAreaGeometry() {
     navigationArea.add(createWallElement(new Vector3(-19.5, 1, -0.8), new Vector3(0, 0, 60), new Vector3(0.06, 3, 0.06), occluderMaterial));
     // Kamar mandi dosen pria
     navigationArea.add(createWallElement(new Vector3(-24.7, 1, 4.9), new Vector3(0, 0, 60), new Vector3(0.06, 3, 0.06), occluderMaterial));
+    navigationArea.add(createWallElement(new Vector3(0, 1, 0), new Vector3(0, 0, 60), new Vector3(0.06, 3, 0.06), occluderMaterial));
     // Kamar mandi dosen wanita
     // navigationArea.add(createWallElement(new Vector3(-23.6, 1, 4.3), new Vector3(0, 0, 60), new Vector3(0.06, 3, 0.06), occluderMaterial));
 
 
     // UKURAN asli di real-world
-    // const floorGeometry = new PlaneGeometry(57.4, 18);
-    const floorGeometry = new PlaneGeometry(58.7, 20);
+    const floorGeometry = new PlaneGeometry(57.4, 18);
+    // const floorGeometry = new PlaneGeometry(58.7, 20);
     // const floorGeometry = new PlaneGeometry(18, 57.4);
     const floorTexture = new TextureLoader().load(lt9ImageUrl);
     // const floorMaterial = new MeshBasicMaterial({ color: 0x26B35A });
@@ -90,6 +91,17 @@ function setupNavigationAreaGeometry() {
     // floorPlaneMesh.visible = true;
     navigationArea.add(floorPlaneMesh);
 
+    // Create edges geometry for the floor
+    const edgesGeometry = new EdgesGeometry(floorGeometry);
+    const lineMaterial = new LineBasicMaterial({ color: 0x000000 }); // Define border color
+    const floorEdges = new LineSegments(edgesGeometry, lineMaterial);
+    floorEdges.renderOrder = 4; // Make sure it's rendered above the plane
+    navigationArea.add(floorEdges);
+
+
+    // // To translate the plane, you can simply set its position
+    floorPlaneMesh.position.set(0, 0, 0); // Set x, y, z coordinates accordingly
+    floorEdges.position.copy(floorPlaneMesh.position); // Make sure edges follow the plane's position
     // navigation area parent for easier placement
     const navigationAreaParent = new Group();
     navigationAreaParent.add(navigationArea);
