@@ -56,13 +56,13 @@ class ImageTrackingWebXR {
             trackedImages: [
                 {
                     image: imgMarkerHiroBitmap, // tell webxr this is the image target we want to track
-                    // widthInMeters: 0.13, // in meters what the size of the PRINTED image in the real world
-                    widthInMeters: 0.2, // in meters what the size of the PRINTED image in the real world
+                    widthInMeters: 0.135, // in meters what the size of the PRINTED image in the real world
+                    // widthInMeters: 0.2, // in meters what the size of the PRINTED image in the real world
                 },
                 {
                     image: imgNFTEarthBitmap, // tell webxr this is the image target we want to track
-                    // widthInMeters: 0.13, // in meters what the size of the PRINTED image in the real world
-                    widthInMeters: 0.2, // in meters what the size of the PRINTED image in the real world
+                    widthInMeters: 0.135, // in meters what the size of the PRINTED image in the real world
+                    // widthInMeters: 0.2, // in meters what the size of the PRINTED image in the real world
                 },
             ],
             //this is for the mobile debug
