@@ -2,8 +2,6 @@ import { Vector3, MeshBasicMaterial, Mesh, Group, ArrowHelper, BoxGeometry, Buff
 
 import { Pathfinding } from "three-pathfinding";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-// import NavMeshUrl from "/lt9-nav2.gltf";
-// import NavMeshUrl from "/nav-bis-3.gltf";
 import NavMeshUrl from "/2.gltf";
 
 const zeroVector = new Vector3(0, 0, 0);
@@ -17,7 +15,8 @@ let targetPosition = new Vector3();
 
 // posisi end-point ketika aplikasi berjalan
 // let tempTargetPosition = new Vector3(9.5, 0.2, 0.9);
-let tempTargetPosition = new Vector3(12, 0.2, 0.9);
+// let tempTargetPosition = new Vector3(12, 0.2, 0.9);
+let tempTargetPosition = new Vector3(-1, 0.2, 0.7);
 
 let line;
 
@@ -28,6 +27,7 @@ let isStartCubeCreated = false;
 let isEndCubeCreated = false;
 
 const navArrows = [];
+const points = [];
 
 class PathFindingWebXR {
     constructor(cameraParam, navigationAreaParam) {
@@ -73,9 +73,9 @@ class PathFindingWebXR {
             }
         );
 
-        // navigation line
+        // navigation line (MAKE LINE)
         // const lineGeometry = new BufferGeometry();
-        // const lineMaterial = new LineBasicMaterial({ color: 0xff0000, linewidth: 12 });
+        // const lineMaterial = new LineBasicMaterial({ color: 0xff0000, linewidth: 1 });
         // line = new Line(lineGeometry, lineMaterial);
         // line.renderOrder = 3;
         // navigationArea.add(line);
@@ -100,19 +100,118 @@ class PathFindingWebXR {
         }
 
 
-        // ketika user menekan tombol, maka value tempTargetPosition berubah dan path planning diarahkan ke sana
-        document.getElementById("hcmTarget").addEventListener("click", () => {
-            console.log("kitchen selected");
-            tempTargetPosition.set(12, 0.2, 0.9);
+        // // ketika user menekan tombol, maka value tempTargetPosition berubah dan path planning diarahkan ke sana
+        // document.getElementById("hcmTarget").addEventListener("click", () => {
+        //     console.log("kitchen selected");
+        //     tempTargetPosition.set(12, 0.2, 0.9);
+        // });
+        // document.getElementById("kelasTarget").addEventListener("click", () => {
+        //     console.log("livingRoom selected");
+        //     //ruang dosen
+        //     // tempTargetPosition.set(9.5, 0.2, 0.9);
+        //     //ruang mahasiswa
+        //     // tempTargetPosition.set(-1, 0.2, 0.9);
+        //     //ruang gudang
+        //     tempTargetPosition.set(22, 0.2, 3.6);
+        // });
+
+        // On veut aller en 213
+        document.getElementById("room213Target").addEventListener("click", () => {
+            console.log("room 213 selected");
+            document.getElementById("room213Target").setAttribute("hidden", "true")
+            document.getElementById("room211Target").setAttribute("hidden", "true")
+            document.getElementById("stairsTarget").setAttribute("hidden", "true")
+            tempTargetPosition.set(1, 0.2, 1);
+            // J'ai scanné le marker de la 211, donc je vais en 213
+            if (navigationArea.position.x === -1 && navigationArea.position.z === -1) {
+                // J'ai scanné le marker de la 213, donc j'y suis déjà
+                const points = [];
+                points.push({ x: 1, y: 0.2, z: 1 });
+                const lineGeometry = new BufferGeometry();
+                const lineMaterial = new LineBasicMaterial({ color: 0xff0000, linewidth: 100 });
+                let line = new Line(lineGeometry, lineMaterial);
+                line.renderOrder = 3;
+                line.geometry.setFromPoints(points);
+                navigationArea.add(line);
+            } else if (navigationArea.position.x === -12 && navigationArea.position.z === -5) {
+                // J'ai scanné le marker de la 211, donc je vais en 213
+                const points = [];
+                points.push({ x: 12, y: 0.2, z: 5 });
+                points.push({ x: 12, y: 0.2, z: 0.5 });
+                points.push({ x: 10, y: 0.2, z: 0.5 });
+                points.push({ x: 10, y: 0.2, z: -0.5 });
+                points.push({ x: 6.5, y: 0.2, z: -0.5 });
+                points.push({ x: 6.5, y: 0.2, z: 1 });
+                points.push({ x: 1, y: 0.2, z: 1 });
+                const lineGeometry = new BufferGeometry();
+                const lineMaterial = new LineBasicMaterial({ color: 0xff0000, linewidth: 100 });
+                let line = new Line(lineGeometry, lineMaterial);
+                line.renderOrder = 3;
+                line.geometry.setFromPoints(points);
+                navigationArea.add(line);
+            }
         });
-        document.getElementById("kelasTarget").addEventListener("click", () => {
-            console.log("livingRoom selected");
-            //ruang dosen
-            // tempTargetPosition.set(9.5, 0.2, 0.9);
-            //ruang mahasiswa
-            // tempTargetPosition.set(-1, 0.2, 0.9);
-            //ruang gudang
+
+        // On veut aller en 211
+        document.getElementById("room211Target").addEventListener("click", () => {
+            console.log("room 211 selected");
+            document.getElementById("room213Target").setAttribute("hidden", "true")
+            document.getElementById("room211Target").setAttribute("hidden", "true")
+            document.getElementById("stairsTarget").setAttribute("hidden", "true")
             tempTargetPosition.set(22, 0.2, 3.6);
+            // if (navigationArea.position.x === -1 && navigationArea.position.z === -1) {
+            // J'ai scanné le marker de la 213, donc je vais en 211
+            const points = [];
+            points.push({ x: 12, y: 0.2, z: 0.9 });
+            points.push({ x: 22, y: 0.2, z: 3.6 });
+            // points.push({ x: 10, y: 0.2, z: 0.5 });
+            // points.push({ x: 10, y: 0.2, z: -0.5 });
+            // points.push({ x: 6.5, y: 0.2, z: -0.5 });
+            // points.push({ x: 6.5, y: 0.2, z: 1 });
+            // points.push({ x: 1, y: 0.2, z: 1 });
+            const lineGeometry = new BufferGeometry();
+            const lineMaterial = new LineBasicMaterial({ color: 0xff0000, linewidth: 100 });
+            let line = new Line(lineGeometry, lineMaterial);
+            line.renderOrder = 3;
+            line.geometry.setFromPoints(points);
+            navigationArea.add(line);
+            // }
+            //  else if (navigationArea.position.x === -12 && navigationArea.position.z === -5) {
+            //     // J'ai scanné le marker de la 211, donc j'y suis déjà
+            //     const points = [];
+            //     points.push({ x: 12, y: 0.2, z: 5 });
+            //     const lineGeometry = new BufferGeometry();
+            //     const lineMaterial = new LineBasicMaterial({ color: 0xff0000, linewidth: 100 });
+            //     let line = new Line(lineGeometry, lineMaterial);
+            //     line.renderOrder = 3;
+            //     line.geometry.setFromPoints(points);
+            //     navigationArea.add(line);
+            // }
+        });
+
+        // Je veux aller devant l'escalier
+        document.getElementById("stairsTarget").addEventListener("click", () => {
+            console.log("stairs selected");
+            document.getElementById("room213Target").setAttribute("hidden", "true")
+            document.getElementById("room211Target").setAttribute("hidden", "true")
+            document.getElementById("stairsTarget").setAttribute("hidden", "true")
+            // tempTargetPosition.set(25, 0.2, -1);
+            tempTargetPosition.set(9.5, 0.2, 0.9);
+            // if (navigationArea.position.x === -1 && navigationArea.position.z === -1) {
+            // J'ai scanné le marker de la 213, donc je vais à l'escalier
+            const points = [];
+            points.push({ x: 12, y: 0.2, z: 0.9 });
+            points.push({ x: 9.5, y: 0.2, z: 0.9 });
+            // points.push({ x: 10, y: 0.2, z: -1 });
+            // points.push({ x: 15, y: 0.2, z: -1 });
+            // points.push({ x: 20, y: 0.2, z: -1 });
+            // points.push({ x: 25, y: 0.2, z: -1 });
+            const lineGeometry = new BufferGeometry();
+            const lineMaterial = new LineBasicMaterial({ color: 0xff0000, linewidth: 100 });
+            let line = new Line(lineGeometry, lineMaterial);
+            line.renderOrder = 3;
+            line.geometry.setFromPoints(points);
+            navigationArea.add(line);
         });
     }
 
@@ -150,7 +249,7 @@ class PathFindingWebXR {
         // visual for better debugging
         if (!isEndCubeCreated) {
             // const targetGeometry = new BoxGeometry(0.2, 0.2, 0.2);
-            const targetGeometry = new CapsuleGeometry(0.2, 0.2, 0.2);
+            const targetGeometry = new BoxGeometry(0.2, 0.2, 0.2);
             // KOTAK WARNA BIRU
             const targetMaterial = new MeshBasicMaterial({ color: 0x90c8ff });
             const targetCube = new Mesh(targetGeometry, targetMaterial);
@@ -194,7 +293,7 @@ class PathFindingWebXR {
                 // console.log("Zone", zoneData);
 
                 if (path != null) {
-                    const points = [];
+                    // const points = [];
                     points.push(navStart);
                     for (let index = 0; index < path.length; index++) {
                         points.push(path[index]);
@@ -208,14 +307,13 @@ class PathFindingWebXR {
 
                     navigationArea.remove(line);
                     const lineGeometry = new BufferGeometry();
-                    const lineMaterial = new LineBasicMaterial({ color: 0xff0000, linewidth: 50 });
+                    const lineMaterial = new LineBasicMaterial({ color: 0x00ff00, linewidth: 50 }); // Menggunakan warna hijau untuk jalur
                     line = new Line(lineGeometry, lineMaterial);
                     line.renderOrder = 3;
                     line.geometry.setFromPoints(points);
-                    navigationArea.add(line);
+                    // navigationArea.add(line);
 
                     // this.updatePositions(points);
-
                 }
             }
         }

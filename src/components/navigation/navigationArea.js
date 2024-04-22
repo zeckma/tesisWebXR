@@ -52,7 +52,7 @@ function setupNavigationAreaGeometry() {
     // kamar mandi pria
     // navigationArea.add(createWallElement(new Vector3(24.3, 1, -5), new Vector3(0, 0, 60), new Vector3(0.06, 3, 0.06), occluderMaterial));
     // kamar mandi wanita
-    navigationArea.add(createWallElement(new Vector3(24.8, 1, -4.4), new Vector3(0, 0, 60), new Vector3(0.06, 3, 0.06), occluderMaterial));
+    // navigationArea.add(createWallElement(new Vector3(24.8, 1, -4.4), new Vector3(0, 0, 60), new Vector3(0.06, 3, 0.06), occluderMaterial));
     // 09.01 gudang
     navigationArea.add(createWallElement(new Vector3(22, 1, 3.6), new Vector3(0, 0, 60), new Vector3(0.06, 3, 0.06), occluderMaterial));
     // Koordinat 09.02 HCM
@@ -60,23 +60,24 @@ function setupNavigationAreaGeometry() {
     // 09.03 Ruang Dosen
     navigationArea.add(createWallElement(new Vector3(9.5, 1, 0.9), new Vector3(0, 0, 60), new Vector3(0.06, 3, 0.06), occluderMaterial));
     // 09.04 Ruang Mahasiswa
-    navigationArea.add(createWallElement(new Vector3(-2.5, 1, 0.9), new Vector3(0, 0, 60), new Vector3(0.06, 3, 0.06), occluderMaterial));
-    // 09.05 lab PJJ
-    navigationArea.add(createWallElement(new Vector3(-10, 1, 1), new Vector3(0, 0, 60), new Vector3(0.06, 3, 0.06), occluderMaterial));
-    // 09.06 R.Dosen
-    navigationArea.add(createWallElement(new Vector3(-10, 1, -0.8), new Vector3(0, 0, 60), new Vector3(0.06, 3, 0.06), occluderMaterial));
-    // 09.07 lab PJJ
-    navigationArea.add(createWallElement(new Vector3(-12, 1, 1), new Vector3(0, 0, 60), new Vector3(0.06, 3, 0.06), occluderMaterial));
-    // 09.08 lab komputer aided learning
-    navigationArea.add(createWallElement(new Vector3(-12, 1, -0.8), new Vector3(0, 0, 60), new Vector3(0.06, 3, 0.06), occluderMaterial));
-    // 09.09 lab TA MMB
-    navigationArea.add(createWallElement(new Vector3(-19.5, 1, -0.8), new Vector3(0, 0, 60), new Vector3(0.06, 3, 0.06), occluderMaterial));
-    // Kamar mandi dosen pria
-    navigationArea.add(createWallElement(new Vector3(-24.7, 1, 4.9), new Vector3(0, 0, 60), new Vector3(0.06, 3, 0.06), occluderMaterial));
-    navigationArea.add(createWallElement(new Vector3(0, 1, 0), new Vector3(0, 0, 60), new Vector3(0.06, 3, 0.06), occluderMaterial));
+    navigationArea.add(createWallElement(new Vector3(-1, 1, 0.9), new Vector3(0, 0, 60), new Vector3(0.06, 3, 0.06), occluderMaterial));
+    // // 09.05 lab PJJ
+    // navigationArea.add(createWallElement(new Vector3(-10, 1, 1), new Vector3(0, 0, 60), new Vector3(0.06, 3, 0.06), occluderMaterial));
+    // // 09.06 R.Dosen
+    // navigationArea.add(createWallElement(new Vector3(-10, 1, -0.8), new Vector3(0, 0, 60), new Vector3(0.06, 3, 0.06), occluderMaterial));
+    // // 09.07 lab PJJ
+    // navigationArea.add(createWallElement(new Vector3(-12, 1, 1), new Vector3(0, 0, 60), new Vector3(0.06, 3, 0.06), occluderMaterial));
+    // // 09.08 lab komputer aided learning
+    // navigationArea.add(createWallElement(new Vector3(-12, 1, -0.8), new Vector3(0, 0, 60), new Vector3(0.06, 3, 0.06), occluderMaterial));
+    // // 09.09 lab TA MMB
+    // navigationArea.add(createWallElement(new Vector3(-19.5, 1, -0.8), new Vector3(0, 0, 60), new Vector3(0.06, 3, 0.06), occluderMaterial));
+    // // Kamar mandi dosen pria
+    // navigationArea.add(createWallElement(new Vector3(-24.7, 1, 4.9), new Vector3(0, 0, 60), new Vector3(0.06, 3, 0.06), occluderMaterial));
+    // navigationArea.add(createWallElement(new Vector3(0, 1, 0), new Vector3(0, 0, 60), new Vector3(0.06, 3, 0.06), occluderMaterial));
     // Kamar mandi dosen wanita
     // navigationArea.add(createWallElement(new Vector3(-23.6, 1, 4.3), new Vector3(0, 0, 60), new Vector3(0.06, 3, 0.06), occluderMaterial));
 
+    navigationArea.add(createWallElement(new Vector3(-23.6, 1, 4.3), new Vector3(0, 0, 60), new Vector3(0.06, 3, 0.06), occluderMaterial));
 
     // UKURAN asli di real-world
     const floorGeometry = new PlaneGeometry(57.4, 18);
@@ -91,11 +92,11 @@ function setupNavigationAreaGeometry() {
     // floorPlaneMesh.visible = true;
     navigationArea.add(floorPlaneMesh);
 
-    // Create edges geometry for the floor
+    // // Create edges geometry for the floor
     const edgesGeometry = new EdgesGeometry(floorGeometry);
     const lineMaterial = new LineBasicMaterial({ color: 0x000000 }); // Define border color
     const floorEdges = new LineSegments(edgesGeometry, lineMaterial);
-    floorEdges.renderOrder = 4; // Make sure it's rendered above the plane
+    floorEdges.renderOrder = 3; // Make sure it's rendered above the plane
     navigationArea.add(floorEdges);
 
 
@@ -117,5 +118,7 @@ function createWallElement(position, rotation, scale, occluderMaterial) {
 
     return occluderMesh;
 }
+
+
 
 export { setupNavigationAreaGeometry };
