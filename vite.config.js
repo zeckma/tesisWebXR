@@ -10,3 +10,11 @@ export default defineConfig({
     },
     plugins: [basicSsl()],
 });
+
+// export default defineConfig({
+//     publicDir: "Login/",
+//     server: {
+//         host: true,
+//     },
+//     plugins: [basicSsl()],
+// });
